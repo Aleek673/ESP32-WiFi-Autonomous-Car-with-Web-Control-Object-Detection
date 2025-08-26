@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YOLOv8 Detection Monitor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: #ffffff;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-section {
+      flex: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .video-section video {
+      width: 80%;
+      max-width: 900px;
+      height: 70%;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      transition: transform 0.3s ease;
+}
+
+.video-section video:hover {
+  transform: scale(1.01);
+}
+
+
+.sidebar {
+  flex: 1;
+  background: linear-gradient(to bottom, #1a1a1a, #222);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 2px solid #00bcd4;
+  box-shadow: -8px 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.sidebar-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  text-align: center;
+  color: #00eaff;
+  text-shadow: 0 0 8px rgba(0, 234, 255, 0.4);
+}
+
+.sidebar-header p {
+  margin: 5px 0 20px;
+  font-size: 0.95rem;
+  color: #aaa;
+  text-align: center;
+}
+
+.status-card, .objects-card {
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.05);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.status-card:hover, .objects-card:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.status {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 15px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.status.go {
+  background: linear-gradient(to right, #00b09b, #96c93d);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(0, 255, 100, 0.4);
+}
+
+.status.stop {
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(255, 50, 50, 0.4);
+}
+
+.status.unknown {
+  background: linear-gradient(to right, #6c757d, #343a40);
+  color: #ccc;
+}
+
+.objects-card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 6px;
+  color: #00eaff;
+}
+
+.object-list {
+  list-style: none;
+  padding: 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.object-list li {
+  padding: 10px 14px;
+  background-color: #333;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.object-list li:hover {
+  background-color: #444;
+}
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column
+      }
+
+      .video-section, .sidebar {
+        flex: none;
+        width: 100%;
+        height: auto;
+      }
+
+      .video-section {
+        padding: 15px;
+      }
+
+      .sidebar {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Centered Video Feed -->
+    <div class="video-section">
+      <video id="live-video" autoplay muted controls>
+        <source src="http://localhost:5000/video_feed" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+    </div>
+
+<!-- Right Sidebar -->
+<div class="sidebar">
+  <!-- Title -->
+  <div class="sidebar-header">
+    <h1>YOLOv8 Monitor</h1>
+    <p>Real-Time Detection Dashboard</p>
+  </div>
+
+  <!-- Detection Status -->
+  <div class="status-card">
+    <div id="status" class="status unknown">State: LOADING...</div>
+  </div>
+
+  <!-- Detected Objects -->
+  <div class="objects-card">
+    <h2>Detected Objects</h2>
+    <ul class="object-list" id="object-list">
+      <li>Loading...</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+</body>
+</html>
